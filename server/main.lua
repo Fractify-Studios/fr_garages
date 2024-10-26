@@ -66,16 +66,20 @@ RegisterNetEvent("fr_garages:takeOutVehicle", function(parking, plate)
 	)
 end)
 
-RegisterNetEvent("fr_garages:parkVehicle", function(netId, plate, parking, slot)
+RegisterNetEvent("fr_garages:parkVehicle", function(netId, plate, parking, slot, properties)
 	local _source = source
 
 	DeleteEntity(NetworkGetEntityFromNetworkId(netId))
 
-	MySQL.update.await("UPDATE owned_vehicles SET stored = 1, parking = @parking, slot = @slot WHERE plate = @plate", {
-		["@parking"] = parking,
-		["@slot"] = slot,
-		["@plate"] = plate,
-	})
+	MySQL.update.await(
+		"UPDATE owned_vehicles SET stored = 1, parking = @parking, slot = @slot, properties = @properties WHERE plate = @plate",
+		{
+			["@parking"] = parking,
+			["@slot"] = slot,
+			["@properties"] = json.encode(properties),
+			["@plate"] = plate,
+		}
+	)
 
 	local result = MySQL.single.await(
 		"SELECT owner, second_owner, plate, model, properties, slot FROM owned_vehicles WHERE plate = @plate",

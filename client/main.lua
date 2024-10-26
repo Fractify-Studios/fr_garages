@@ -101,6 +101,10 @@ Citizen.CreateThread(function()
 						goto continue
 					end
 
+					if not v.coords then
+						goto continue
+					end
+
 					if #(GetEntityCoords(PlayerPedId()) - vec3(v.coords.x, v.coords.y, v.coords.z)) < 3 then
 						CanPark = true
 						Slot = _slot
@@ -181,12 +185,15 @@ function ParkVehicle()
 
 	SetVehicleDoorsLocked(vehicle, 2)
 
+	local properties = ESX.Game.GetVehicleProperties(vehicle)
+
 	TriggerServerEvent(
 		"fr_garages:parkVehicle",
 		NetworkGetNetworkIdFromEntity(vehicle),
 		GetVehicleNumberPlateText(vehicle),
 		CurrentParking,
-		Slot
+		Slot,
+		properties
 	)
 end
 

@@ -2,7 +2,7 @@ Config = {}
 
 Config.Language = {
 	["takeout"] = "Take out vehicle",
-	["takeoutnotify"] = "Vehicle successfully taked out",
+	["takeoutnotify"] = "Vehicle successfully taken out",
 	["cantpark"] = "You cannot park this vehicle there",
 	["tip"] = "Pull into an available parking space and press [E]",
 	["keymapping"] = "Park vehicle",

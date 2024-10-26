@@ -100,7 +100,7 @@ RegisterNetEvent("fr_garages:takeOutVehicle", function(parking, plate)
 	TriggerClientEvent(
 		"fr_garages:tkVehicle",
 		_source,
-		{ model = result.model, coords = Config.Parkings[parking].slots[result.slot], properties = result.properties }
+		{ model = result.model, coords = Config.Parkings[parking].parking_slots[result.slot], properties = result.properties }
 	)
 end)
 

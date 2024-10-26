@@ -19,7 +19,7 @@ function EnterParking(parking)
 	local vehicles = lib.callback.await("fr_garages:getVehicles", false, parking)
 	local tb = {}
 
-	for i, v in pairs(Config.Parkings[parking].slots) do
+	for i, v in pairs(Config.Parkings[parking].parking_slots) do
 		tb[i] = { coords = v, data = nil, localId = nil }
 	end
 
@@ -59,7 +59,7 @@ end
 function LeaveParking(parking)
 	local tb = {}
 
-	for i, v in pairs(Config.Parkings[parking].slots) do
+	for i, v in pairs(Config.Parkings[parking].parking_slots) do
 		tb[i] = { coords = v, data = nil, localId = nil }
 	end
 
@@ -74,7 +74,7 @@ end
 
 Citizen.CreateThread(function()
 	for parkingName, parking in pairs(Config.Parkings) do
-		local blip = AddBlipForCoord(parking.blip.x, parking.blip.y, parking.blip.z)
+		local blip = AddBlipForCoord(parking.blip_location.x, parking.blip_location.y, parking.blip_location.z)
 		SetBlipSprite(blip, Config.Blip.sprite)
 		SetBlipDisplay(blip, Config.Blip.display)
 		SetBlipScale(blip, Config.Blip.scale)
@@ -92,7 +92,7 @@ Citizen.CreateThread(function()
 				CurrentParking = parkingName
 				EnterParking(parkingName)
 
-				lib.showTextUI(Config.Language["tip"], {
+				lib.showTextUI(Config.Language.parking_tip, {
 					position = "top-center",
 				})
 			end,
@@ -190,7 +190,7 @@ function ParkVehicle()
 	end
 
 	if not lib.callback.await("fr_garages:isPlayerOwner", false, GetVehicleNumberPlateText(vehicle)) then
-		ESX.ShowNotification(Config.Language["cantpark"], "error", 3000)
+		ESX.ShowNotification(Config.Language.vehicle_cannot_park, "error", 3000)
 		return false
 	end
 
@@ -221,7 +221,7 @@ RegisterCommand("+frpark", function()
 
 	local canPark = false
 
-	for _slot, v in pairs(Config.Parkings[CurrentParking].slots) do
+	for _slot, v in pairs(Config.Parkings[CurrentParking].parking_slots) do
 		if #(GetEntityCoords(PlayerPedId()) - vec3(v.x, v.y, v.z)) < 3 then
 			canPark = true
 			Slot = _slot
@@ -237,7 +237,7 @@ RegisterCommand("+frpark", function()
 	ParkVehicle()
 end, false)
 
-RegisterKeyMapping("+frpark", Config.Language["keymapping"], "keyboard", "E")
+RegisterKeyMapping("+frpark", Config.Language.keymapping_park_vehicle, "keyboard", "E")
 
 RegisterNetEvent("fr_garages:vehicleParked", function(parking, slot, data)
 	if parking ~= CurrentParking then
@@ -252,10 +252,10 @@ RegisterNetEvent("fr_garages:vehicleParked", function(parking, slot, data)
 
 	local vehicle = CreateVehicle(
 		data.model,
-		Config.Parkings[parking].slots[slot].x,
-		Config.Parkings[parking].slots[slot].y,
-		Config.Parkings[parking].slots[slot].z,
-		Config.Parkings[parking].slots[slot].w,
+		Config.Parkings[parking].parking_slots[slot].x,
+		Config.Parkings[parking].parking_slots[slot].y,
+		Config.Parkings[parking].parking_slots[slot].z,
+		Config.Parkings[parking].parking_slots[slot].w,
 		false,
 		false
 	)

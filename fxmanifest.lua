@@ -1,9 +1,9 @@
 fx_version("cerulean")
 game("gta5")
 
-author("Fractify Studio")
-description("Immersive garages system")
-version("1.0.2")
+author("Fractify Studios <https://fractify.pl>")
+description("An immersive garage system for FiveM")
+version("1.0.3")
 
 lua54("yes")
 

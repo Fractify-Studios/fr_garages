@@ -6,6 +6,7 @@ Config.Language = {
 	["cantpark"] = "You cannot park this vehicle there",
 	["tip"] = "Pull into an available parking space and press [E]",
 	["keymapping"] = "Park vehicle",
+	["blip"] = "Garage",
 }
 
 -- How should interaction work, default is ox_target but you can rewrite it to your interaction system
@@ -37,6 +38,8 @@ end
 
 Config.Parkings = {
 	["main"] = {
+		-- Where should blip be created
+		blip = vec3(147.1915, -1081.5627, 29.1924),
 		-- They should be on the same Z coord
 		border = {
 			vec3(94.2682, -1081.7063, 29),
@@ -55,4 +58,12 @@ Config.Parkings = {
 			vec4(139.5879, -1080.6073, 29.1925, 185.6599),
 		},
 	},
+}
+
+Config.Blip = {
+	sprite = 357,
+	colour = 5,
+	scale = 1.0,
+	display = 4,
+	text = Config.Language["blip"],
 }

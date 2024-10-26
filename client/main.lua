@@ -70,6 +70,16 @@ end
 
 Citizen.CreateThread(function()
 	for parkingName, parking in pairs(Config.Parkings) do
+		local blip = AddBlipForCoord(parking.blip.x, parking.blip.y, parking.blip.z)
+		SetBlipSprite(blip, Config.Blip.sprite)
+		SetBlipDisplay(blip, Config.Blip.display)
+		SetBlipScale(blip, Config.Blip.scale)
+		SetBlipColour(blip, Config.Blip.colour)
+		SetBlipAsShortRange(blip, true)
+		BeginTextCommandSetBlipName("STRING")
+		AddTextComponentString(Config.Blip.text)
+		EndTextCommandSetBlipName(blip)
+
 		lib.zones.poly({
 			points = parking.border,
 			thickness = parking.thickness,

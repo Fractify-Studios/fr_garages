@@ -15,7 +15,7 @@ end)
 
 exports("GetVehicles", GetVehicles)
 
-function IsPlayerOwner(playerId, parking)
+function IsPlayerOwner(playerId, plate)
 	local xPlayer = ESX.GetPlayerFromId(source)
 
 	local result = MySQL.single.await(
@@ -74,6 +74,8 @@ function SetOwner(playerId, plate, second)
 
 	return result > 0 and true or false
 end
+
+exports("SetOwner", SetOwner)
 
 RegisterNetEvent("fr_garages:takeOutVehicle", function(parking, plate)
 	local _source = source

@@ -136,7 +136,7 @@ end)
 
 function TakeOutVehicle(plate)
 	if not lib.callback.await("fr_garages:isPlayerOwner", false, plate) then
-		return
+		return false
 	end
 
 	TriggerServerEvent("fr_garages:takeOutVehicle", CurrentParking, plate)
@@ -186,11 +186,12 @@ function ParkVehicle()
 	local vehicle = GetVehiclePedIsIn(playerPed, false)
 
 	if not vehicle or not Slot then
-		return
+		return false
 	end
 
 	if not lib.callback.await("fr_garages:isPlayerOwner", false, GetVehicleNumberPlateText(vehicle)) then
-		return ESX.ShowNotification(Config.Language["cantpark"], "error", 3000)
+		ESX.ShowNotification(Config.Language["cantpark"], "error", 3000)
+		return false
 	end
 
 	TaskLeaveVehicle(playerPed, vehicle, 0)

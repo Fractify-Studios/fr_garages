@@ -1,4 +1,4 @@
-lib.callback.register("fr_garages:getVehicles", function(source, parking)
+function GetVehicles(parking)
 	local result = MySQL.query.await(
 		"SELECT owner, second_owner, plate, model, properties, slot FROM owned_vehicles WHERE parking = @parking",
 		{
@@ -7,9 +7,15 @@ lib.callback.register("fr_garages:getVehicles", function(source, parking)
 	)
 
 	return result
+end
+
+lib.callback.register("fr_garages:getVehicles", function(playerId, parking)
+	return GetVehicles(parking)
 end)
 
-lib.callback.register("fr_garages:isPlayerOwner", function(source, plate)
+exports("GetVehicles", GetVehicles)
+
+function IsPlayerOwner(playerId, parking)
 	local xPlayer = ESX.GetPlayerFromId(source)
 
 	local result = MySQL.single.await(
@@ -25,9 +31,13 @@ lib.callback.register("fr_garages:isPlayerOwner", function(source, plate)
 	end
 
 	return true
-end)
+end
 
-lib.callback.register("fr_garages:isCarParked", function(source, plate)
+lib.callback.register("fr_garages:isPlayerOwner", IsPlayerOwner)
+
+exports("IsPlayerOwner", IsPlayerOwner)
+
+function IsCarParked(plate)
 	local result = MySQL.single.await("SELECT 1 FROM owned_vehicles WHERE stored = 1 AND plate = @plate", {
 		["@plate"] = plate,
 	})
@@ -37,7 +47,33 @@ lib.callback.register("fr_garages:isCarParked", function(source, plate)
 	end
 
 	return true
+end
+
+lib.callback.register("fr_garages:isCarParked", function(source, plate)
+	return IsCarParked(plate)
 end)
+
+exports("IsCarParked", IsCarParked)
+
+function SetOwner(playerId, plate, second)
+	second = second or false
+
+	local xPlayer = ESX.GetPlayerFromId(playerId)
+
+	if not xPlayer then
+		return false
+	end
+
+	local query = (not second and "UPDATE owned_vehicles SET owner = @identifier WHERE plate = @plate")
+		or "UPDATE owned_vehicles SET second_owner = @identifier WHERE plate = @plate"
+
+	local result = MySQL.update.await(query, {
+		["@identifier"] = xPlayer.indentifier,
+		["@plate"] = plate,
+	})
+
+	return result > 0 and true or false
+end
 
 RegisterNetEvent("fr_garages:takeOutVehicle", function(parking, plate)
 	local _source = source

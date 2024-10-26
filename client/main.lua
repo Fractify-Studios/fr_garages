@@ -7,8 +7,12 @@ SpawnedCarsByPlate = {}
 CanPark = false
 Slot = nil
 
-exports("inZone", function()
+exports("InZone", function()
 	return InZone
+end)
+
+exports("CurrentParking", function()
+	return CurrentParking
 end)
 
 function EnterParking(parking)

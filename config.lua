@@ -11,7 +11,7 @@ Config.Language = {
 
 -- How should interaction work, default is ox_target but you can rewrite it to your interaction system
 -- !! IMPORTANT !!
--- Do not forgot about canInteract section, because without it players they will be able to take out other player's vehicles
+-- Do not forgot about canInteract section, because without it players will be able to take out other player's vehicles
 
 Config.RegisterInteraction = function()
 	exports.ox_target:addGlobalVehicle({
@@ -19,7 +19,7 @@ Config.RegisterInteraction = function()
 		canInteract = function(entity)
 			-- Don't forget about this
 			if
-				exports["fr_garages"]:inZone()
+				exports["fr_garages"]:InZone()
 				and lib.callback.await("fr_garages:isPlayerOwner", false, GetVehicleNumberPlateText(entity))
 				and lib.callback.await("fr_garages:isCarParked", false, GetVehicleNumberPlateText(entity))
 			then

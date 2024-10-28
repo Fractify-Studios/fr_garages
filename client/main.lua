@@ -85,8 +85,8 @@ Citizen.CreateThread(function()
 		EndTextCommandSetBlipName(blip)
 
 		lib.zones.poly({
-			points = parking.border,
-			thickness = parking.thickness,
+			points = parking.parking_border,
+			thickness = parking.parking_thickness,
 			onEnter = function()
 				InZone = true
 				CurrentParking = parkingName

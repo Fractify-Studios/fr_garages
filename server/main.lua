@@ -1,6 +1,8 @@
+--- @param parking (string) - The name of the parking location
+--- @return (table) - A table of vehicles that are currently parked at the specified location
 function GetVehicles(parking)
 	local result = MySQL.query.await(
-		"SELECT owner, second_owner, plate, model, properties, slot FROM owned_vehicles WHERE parking = @parking",
+		'SELECT owner, second_owner, plate, model, properties, slot FROM owned_vehicles WHERE parking = @parking AND type = "car"',
 		{
 			["@parking"] = parking,
 		}
@@ -15,6 +17,9 @@ end)
 
 exports("GetVehicles", GetVehicles)
 
+--- @param playerId (number) - The ID of the player
+--- @param plate (string) - The plate of the vehicle
+--- @return (boolean) - Whether the specified player is the owner of the specified vehicle
 function IsPlayerOwner(playerId, plate)
 	local xPlayer = ESX.GetPlayerFromId(source)
 
@@ -37,6 +42,8 @@ lib.callback.register("fr_garages:isPlayerOwner", IsPlayerOwner)
 
 exports("IsPlayerOwner", IsPlayerOwner)
 
+--- @param plate (string) - The plate of the vehicle
+--- @return (boolean) - Whether the specified vehicle is currently parked
 function IsCarParked(plate)
 	local result = MySQL.single.await("SELECT 1 FROM owned_vehicles WHERE stored = 1 AND plate = @plate", {
 		["@plate"] = plate,
@@ -55,6 +62,10 @@ end)
 
 exports("IsCarParked", IsCarParked)
 
+--- @param playerId (number) - The ID of the player
+--- @param plate (string) - The plate of the vehicle
+--- @param second? (boolean) - Whether the player is the second owner
+--- @return (boolean) - Whether the owner was successfully set
 function SetOwner(playerId, plate, second)
 	second = second or false
 
@@ -97,11 +108,11 @@ RegisterNetEvent("fr_garages:takeOutVehicle", function(parking, plate)
 		["@plate"] = plate,
 	})
 
-	TriggerClientEvent(
-		"fr_garages:tkVehicle",
-		_source,
-		{ model = result.model, coords = Config.Parkings[parking].parking_slots[result.slot], properties = result.properties }
-	)
+	TriggerClientEvent("fr_garages:tkVehicle", _source, {
+		model = result.model,
+		coords = Config.Parkings[parking].parking_slots[result.slot],
+		properties = result.properties,
+	})
 end)
 
 RegisterNetEvent("fr_garages:parkVehicle", function(netId, plate, parking, slot, properties)

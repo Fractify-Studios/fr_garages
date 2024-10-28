@@ -194,6 +194,26 @@ function ParkVehicle()
 		return false
 	end
 
+	if Config.Parkings[CurrentParking].jobs then
+		if not ESX.PlayerData.job or not ESX.PlayerData.job.name then
+			ESX.ShowNotification(Config.Language.vehicle_cannot_park, "error", 3000)
+			return false
+		end
+
+		local allow = false
+		for _, v in pairs(Config.Parkings[CurrentParking].jobs) do
+			if v == ESX.PlayerData.job.name then
+				allow = true
+				break
+			end
+		end
+
+		if not allow then
+			ESX.ShowNotification(Config.Language.vehicle_cannot_park, "error", 3000)
+			return false
+		end
+	end
+
 	TaskLeaveVehicle(playerPed, vehicle, 0)
 
 	Wait(2000)

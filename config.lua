@@ -24,6 +24,7 @@ Config.Parkings = {
 			vec4(143.6143, -1081.1989, 29.1924, 180.8258),
 			vec4(139.5879, -1080.6073, 29.1925, 185.6599),
 		},
+		jobs = { "police" }, -- List of jobs that may use the garage. Remove this line if it should be available to everyone.
 		debug = false,
 	},
 }

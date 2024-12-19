@@ -1,0 +1,14 @@
+name: Call Discord Webhook Notification
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  call-workflow:
+    uses: your-org/org-actions/.github/workflows/discord_webhook.yml@main
+    with:
+      branch: ${{ github.ref_name }}
+    secrets:
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}

@@ -7,7 +7,7 @@ on:
 
 jobs:
   call-workflow:
-    uses: your-org/org-actions/.github/workflows/discord_webhook.yml@main
+    uses: fractify-studios/github-actions/.github/workflows/discord_webhook.yml@main
     with:
       branch: ${{ github.ref_name }}
     secrets:
